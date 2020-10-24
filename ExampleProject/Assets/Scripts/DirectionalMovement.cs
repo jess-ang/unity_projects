@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class DirectionalMovement : MonoBehaviour
 {
-    public float moveSpeed;
+    public float moveSpeed, sneakMultiplier, runMultiplier;
+
     // Update is called once per frame
     void Update()
     {
@@ -13,6 +14,12 @@ public class DirectionalMovement : MonoBehaviour
 
     private void MoveCharacter()
     {
+        float multiplier = 1f;
+        if(Input.GetKey(KeyCode.LeftShift))
+            multiplier *= sneakMultiplier;
+        if(Input.GetKey(KeyCode.LeftControl))
+            multiplier *= runMultiplier;
+        
         Vector3 vector = Vector3.zero;
         if(Input.GetKey(KeyCode.W))
             vector += Vector3.forward;
@@ -26,7 +33,7 @@ public class DirectionalMovement : MonoBehaviour
         if(vector!=Vector3.zero)
         {
             transform.LookAt(transform.position + vector);
-            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+            transform.Translate(Vector3.forward * moveSpeed * multiplier * Time.deltaTime);
             vector = Vector3.zero;
         }
     }
